@@ -1,4 +1,3 @@
-# tuvarna-medical-facility
 # Medical Facility Management System
 
 ## Description
