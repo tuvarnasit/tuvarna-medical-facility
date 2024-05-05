@@ -13,17 +13,17 @@ namespace HospitalManagement.Forms.DoctorForms
 {
     public partial class CreatePatientForm : Form
     {
-        private List<Control> createPatientControls;
-        private ApplicationDbContext db;
+        private List<Control>        m_createPatientControls;
+        private ApplicationDbContext m_db;
 
         public CreatePatientForm()
         {
             InitializeComponent();
         }
 
-        public CreatePatientForm(ApplicationDbContext db):this()
+        public CreatePatientForm(ApplicationDbContext t_db):this()
         {
-            this.db = db;
+            this.m_db = t_db;
             LoadMedicalConditionListBoxData();
             PopulateCreatePatientControls();
         }
@@ -31,21 +31,21 @@ namespace HospitalManagement.Forms.DoctorForms
         private void LoadMedicalConditionListBoxData()
         {
             medicalConditionListBox.Items.Clear();
-            var allMedicalConditions = db.MedicalConditions.ToList();
+            var _allMedicalConditions = m_db.MedicalConditions.ToList();
 
-            foreach (var medicalCondition in allMedicalConditions)
+            foreach (var _medicalCondition in _allMedicalConditions)
             {
-                medicalConditionListBox.Items.Add(medicalCondition.Name);
+                medicalConditionListBox.Items.Add(_medicalCondition.Name);
             }
         }
 
         private void PopulateCreatePatientControls()
         {
-            createPatientControls = new List<Control>();
-            createPatientControls.Add(egnTextBox);
-            createPatientControls.Add(firstNameTextBox);
-            createPatientControls.Add(middleNameTextBox);
-            createPatientControls.Add(lastNameTextBox);
+            m_createPatientControls = new List<Control>();
+            m_createPatientControls.Add(egnTextBox);
+            m_createPatientControls.Add(firstNameTextBox);
+            m_createPatientControls.Add(middleNameTextBox);
+            m_createPatientControls.Add(lastNameTextBox);
         }
 
         private async void createPatientButton_Click(object sender, EventArgs e)
@@ -64,8 +64,8 @@ namespace HospitalManagement.Forms.DoctorForms
                 }
 
                 // провери дали има пациент с регистрирано такова егн
-                var patientAlreadyExists = db.Patients.FirstOrDefault(x => x.EGN == egnTextBox.Text);
-                if (patientAlreadyExists != null)
+                var _patientAlreadyExists = m_db.Patients.FirstOrDefault(x => x.EGN == egnTextBox.Text);
+                if (_patientAlreadyExists != null)
                 {
                     MessageBox.Show("Вече има регистриран пациент с такова ЕГН.", "Грешка.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -73,27 +73,27 @@ namespace HospitalManagement.Forms.DoctorForms
                 // ако пациента НЕ съществува ще продъжи надолу
 
                 // създай пациент
-                var patient = new Patient()
+                var _patient = new Patient()
                 {
-                    FirstName = firstNameTextBox.Text,
-                    MiddleName = middleNameTextBox.Text,
-                    LastName = lastNameTextBox.Text,
-                    EGN = egnTextBox.Text,
+                    FirstName   = firstNameTextBox.Text,
+                    MiddleName  = middleNameTextBox.Text,
+                    LastName    = lastNameTextBox.Text,
+                    EGN         = egnTextBox.Text,
                 };
 
                 // ако има избрано заболяване за съответния пациент, запамети го
                 if (medicalConditionListBox.SelectedIndex != -1)
                 {
-                    var medicalCondition = db.MedicalConditions.Single(x => x.Name == medicalConditionListBox.SelectedItem.ToString());
-                    patient.MedicalConditionId = medicalCondition.Id;
+                    var _medicalCondition = m_db.MedicalConditions.Single(x => x.Name == medicalConditionListBox.SelectedItem.ToString());
+                    _patient.MedicalConditionId = _medicalCondition.Id;
                 }
 
-                await db.Patients.AddAsync(patient);
-                await db.SaveChangesAsync();
+                await m_db.Patients.AddAsync(_patient);
+                await m_db.SaveChangesAsync();
 
-                foreach (var control in createPatientControls)
+                foreach (var _control in m_createPatientControls)
                 {
-                    control.Text = "";
+                    _control.Text = "";
                 }
                 medicalConditionListBox.SelectedIndex = -1;
 
@@ -103,10 +103,10 @@ namespace HospitalManagement.Forms.DoctorForms
 
         private bool CheckIfAllInfoIsFilled()
         {
-            foreach (var control in createPatientControls)
+            foreach (var _control in m_createPatientControls)
             {
                 // за всеки един TextBox ако текста само на един даже да не е попълнен
-                if (string.IsNullOrWhiteSpace(control.Text))
+                if (string.IsNullOrWhiteSpace(_control.Text))
                 {
                     // върни false че не е попълнен
                     return false;

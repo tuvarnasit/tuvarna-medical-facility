@@ -13,17 +13,17 @@ namespace HospitalManagement.Forms.AdminForms
 {
     public partial class CreateDoctorForm : Form
     {
-        private List<Control> createDoctorControls;
-        private ApplicationDbContext db;
+        private List<Control>        m_createDoctorControls;
+        private ApplicationDbContext m_db;
 
         public CreateDoctorForm()
         {
             InitializeComponent();
         }
 
-        public CreateDoctorForm(ApplicationDbContext db):this()
+        public CreateDoctorForm(ApplicationDbContext t_db) : this()
         {
-            this.db = db;
+            this.m_db = t_db;
             LoadSpecialityListBoxData();
             PopulateCreateDoctorControls();
         }
@@ -31,9 +31,9 @@ namespace HospitalManagement.Forms.AdminForms
         private void LoadSpecialityListBoxData()
         {
             specialityListBox.Items.Clear();
-            var allDoctorSpecialities = db.DoctorSpecialities.ToList();
+            var _allDoctorSpecialities = m_db.DoctorSpecialities.ToList();
 
-            foreach (var speciality in allDoctorSpecialities)
+            foreach (var speciality in _allDoctorSpecialities)
             {
                 specialityListBox.Items.Add(speciality.Name);
             }
@@ -41,12 +41,12 @@ namespace HospitalManagement.Forms.AdminForms
 
         private void PopulateCreateDoctorControls()
         {
-            createDoctorControls = new List<Control>();
-            createDoctorControls.Add(emailTextBox);
-            createDoctorControls.Add(passwordTextBox);
-            createDoctorControls.Add(firstNameTextBox);
-            createDoctorControls.Add(middleNameTextBox);
-            createDoctorControls.Add(lastNameTextBox);
+            m_createDoctorControls = new List<Control>();
+            m_createDoctorControls.Add(emailTextBox);
+            m_createDoctorControls.Add(passwordTextBox);
+            m_createDoctorControls.Add(firstNameTextBox);
+            m_createDoctorControls.Add(middleNameTextBox);
+            m_createDoctorControls.Add(lastNameTextBox);
         }
 
         private async void createDoctorButton_Click(object sender, EventArgs e)
@@ -57,8 +57,8 @@ namespace HospitalManagement.Forms.AdminForms
             }
             else
             {
-                var userAlreadyExists = db.Users.FirstOrDefault(x => x.Email == emailTextBox.Text);
-                if (userAlreadyExists != null)
+                var _userAlreadyExists = m_db.Users.FirstOrDefault(x => x.Email == emailTextBox.Text);
+                if (_userAlreadyExists != null)
                 {
                     MessageBox.Show("Вече има регистриран User с такъв имейл.", "Грешка.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -67,38 +67,38 @@ namespace HospitalManagement.Forms.AdminForms
                 // ако ролята doctor не съществува ще хвърли грешка,
                 // което е напълно коректно, тъй като предстоящата логика
                 // е за доктори
-                var doctorRole = db.Roles.Single(x => x.Name.ToLower() == "doctor");
+                var _doctorRole = m_db.Roles.Single(x => x.Name.ToLower() == "doctor");
 
-                var user = new User()
+                var _user = new User()
                 {
-                    Email = emailTextBox.Text,
-                    Password = passwordTextBox.Text,
-                    RoleId = doctorRole.Id
+                    Email       = emailTextBox.Text,
+                    Password    = passwordTextBox.Text,
+                    RoleId      = _doctorRole.Id
                 };
 
-                var savedUser = await db.AddAsync(user);
-                await db.SaveChangesAsync();
+                var _savedUser = await m_db.AddAsync(_user);
+                await m_db.SaveChangesAsync();
 
-                var currentSelectedSpeciality = specialityListBox.SelectedItem.ToString();
+                var _currentSelectedSpeciality = specialityListBox.SelectedItem.ToString();
 
                 // тук отново метода .Single() би хвърлил грешка ако не бъде намерена докторска специалност
                 // или има повече от 1 докторска специалност с такова име
-                var doctorSpeciality = db.DoctorSpecialities.Single(x => x.Name == currentSelectedSpeciality);
-                var doctor = new Doctor()
+                var _doctorSpeciality = m_db.DoctorSpecialities.Single(x => x.Name == _currentSelectedSpeciality);
+                var _doctor = new Doctor()
                 {
-                    FirstName = firstNameTextBox.Text,
-                    MiddleName = middleNameTextBox.Text,
-                    LastName = lastNameTextBox.Text,
-                    UserId = savedUser.Entity.Id,
-                    DoctorSpecialityId = doctorSpeciality.Id
+                    FirstName           = firstNameTextBox.Text,
+                    MiddleName          = middleNameTextBox.Text,
+                    LastName            = lastNameTextBox.Text,
+                    UserId              = _savedUser.Entity.Id,
+                    DoctorSpecialityId  = _doctorSpeciality.Id
                 };
 
-                await db.Doctors.AddAsync(doctor);
-                await db.SaveChangesAsync();
+                await m_db.Doctors.AddAsync(_doctor);
+                await m_db.SaveChangesAsync();
 
-                foreach (var control in createDoctorControls)
+                foreach (var _control in m_createDoctorControls)
                 {
-                    control.Text = "";
+                    _control.Text = "";
                 }
                 specialityListBox.SelectedIndex = -1;
 
@@ -114,7 +114,7 @@ namespace HospitalManagement.Forms.AdminForms
                 return false;
             }
 
-            foreach (var control in createDoctorControls)
+            foreach (var control in m_createDoctorControls)
             {
                 // за всеки един TextBox ако текста само на един даже да не е попълнен
                 if (string.IsNullOrWhiteSpace(control.Text))
@@ -126,6 +126,11 @@ namespace HospitalManagement.Forms.AdminForms
             }
             // ако всички полета за добавяне на доктор са попълнени коректно върни true
             return true;
+        }
+
+        private void emailTextBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

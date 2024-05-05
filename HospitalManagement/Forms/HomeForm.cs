@@ -16,10 +16,10 @@ namespace HospitalManagement.Forms
         {
             InitializeComponent();
         }
-        public HomeForm(string email, string role):this()
+        public HomeForm(string t_email, string t_role) :this()
         {
-            roleLabel.Text += role;
-            emailLabel.Text = email;
+            roleLabel.Text += t_role;
+            emailLabel.Text = t_email;
         }
     }
 }

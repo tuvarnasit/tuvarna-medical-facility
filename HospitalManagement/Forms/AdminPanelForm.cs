@@ -6,64 +6,64 @@ namespace HospitalManagement.Forms
 {
     public partial class AdminPanelForm : Form
     {
-        private ApplicationDbContext db;
-        private Color activeButtonColor;
-        private Color notActiveButtonColor;
-        private Form activeForm;
+        private ApplicationDbContext m_db;
+        private Color                m_activeButtonColor;
+        private Color                m_notActiveButtonColor;
+        private Form                 m_activeForm;
         public AdminPanelForm()
         {
             InitializeComponent();
         }
         public AdminPanelForm(User user):this()
         {
-            this.db = new ApplicationDbContext();
-            activeButtonColor = Color.FromArgb(0, 151, 230);
-            notActiveButtonColor = Color.FromArgb(0, 168, 255);
+            this.m_db = new ApplicationDbContext();
+            m_activeButtonColor = Color.FromArgb(0, 151, 230);
+            m_notActiveButtonColor = Color.FromArgb(0, 168, 255);
 
             // това е default-ната форма която е отворена в началото
             MakeFormActive(new HomeForm(user.Email, user.Role.Name));
         }
 
-        private void OpenChildForm(Form childForm)
+        private void OpenChildForm(Form t_childForm)
         {
-            if (childForm.Text == activeForm.Text)
+            if (t_childForm.Text == m_activeForm.Text)
             {
                 // ако искаме отново да отворим същата форма, няма нужда да я презареждаме.
                 return;
             }
 
             // затвори предишната форма
-            if (activeForm != null)
+            if (m_activeForm != null)
             {
-                activeForm.Close();
+                m_activeForm.Close();
             }
             // направи новата форма да е активна
-            MakeFormActive(childForm);
+            MakeFormActive(t_childForm);
         }
-        private void MakeFormActive(Form childForm)
+        private void MakeFormActive(Form t_childForm)
         {
-            activeForm = childForm;
-            childForm.TopLevel = false;
-            childForm.FormBorderStyle = FormBorderStyle.None;
-            childForm.Dock = DockStyle.Fill;
-            contentPanel.Controls.Add(childForm);
-            titleLabel.Text = childForm.Text;
-            childForm.BringToFront();
-            childForm.Show();
+            m_activeForm                = t_childForm;
+            t_childForm.TopLevel        = false;
+            t_childForm.FormBorderStyle = FormBorderStyle.None;
+            t_childForm.Dock            = DockStyle.Fill;
+            contentPanel.Controls.Add(t_childForm);
+            titleLabel.Text             = t_childForm.Text;
+            t_childForm.BringToFront();
+            t_childForm.Show();
         }
         private void createDoctorMenuButton_Click(object sender, EventArgs e)
         {
-            createDoctorMenuButton.BackColor = activeButtonColor;
-            searchDoctorMenuButton.BackColor = notActiveButtonColor;
-            createSpecialityMenuButton.BackColor = notActiveButtonColor;
+            createDoctorMenuButton.BackColor     = m_activeButtonColor;
+            searchDoctorMenuButton.BackColor     = m_notActiveButtonColor;
+            createSpecialityMenuButton.BackColor = m_notActiveButtonColor;
 
-            OpenChildForm(new CreateDoctorForm(db));
+            OpenChildForm(new CreateDoctorForm(m_db));
         }
         private void searchDoctorMenuButton_Click(object sender, EventArgs e)
         {
-            searchDoctorMenuButton.BackColor = activeButtonColor;
-            createDoctorMenuButton.BackColor = notActiveButtonColor;
-            createSpecialityMenuButton.BackColor = notActiveButtonColor;
+            searchDoctorMenuButton.BackColor     = m_activeButtonColor;
+            createDoctorMenuButton.BackColor     = m_notActiveButtonColor;
+            createSpecialityMenuButton.BackColor = m_notActiveButtonColor;
 
             // Тъй като искаме винаги да изпълняваме метода OpenChildForm за всяка една нова отворена форма,
             // а нямаме достъп до този метод вътре в друг клас, ползваме функционално програмиране
@@ -76,18 +76,18 @@ namespace HospitalManagement.Forms
             // след това просто даваме този Action<Form> като параметър при създаването на
             // инстанция на SearchDoctorForm
             // и вече SearchDoctorForm може да изпълнява форми както този клас
-            var openChildFormMethod = (Form form) => OpenChildForm(form);
-            var searchDoctorForm = new SearchDoctorForm(db, openChildFormMethod);
-            OpenChildForm(searchDoctorForm);
+            var _openChildFormMethod = (Form form) => OpenChildForm(form);
+            var _searchDoctorForm    = new SearchDoctorForm(m_db, _openChildFormMethod);
+            OpenChildForm(_searchDoctorForm);
         }
 
         private void createSpecialityMenuButton_Click(object sender, EventArgs e)
         {
-            createSpecialityMenuButton.BackColor = activeButtonColor;
-            searchDoctorMenuButton.BackColor = notActiveButtonColor;
-            createDoctorMenuButton.BackColor = notActiveButtonColor;
+            createSpecialityMenuButton.BackColor = m_activeButtonColor;
+            searchDoctorMenuButton.BackColor     = m_notActiveButtonColor;
+            createDoctorMenuButton.BackColor     = m_notActiveButtonColor;
 
-            OpenChildForm(new DoctorSpecialityForm(db));
+            OpenChildForm(new DoctorSpecialityForm(m_db));
         }
     }
 }

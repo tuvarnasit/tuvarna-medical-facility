@@ -14,27 +14,27 @@ namespace HospitalManagement.Forms.DoctorForms
 {
     public partial class MedicalConditionForm : Form
     {
-        private ApplicationDbContext db;
+        private ApplicationDbContext m_db;
 
         public MedicalConditionForm()
         {
             InitializeComponent();
         }
 
-        public MedicalConditionForm(ApplicationDbContext db):this()
+        public MedicalConditionForm(ApplicationDbContext t_db):this()
         {
-            this.db = db;
+            this.m_db = t_db;
             LoadMedicalConditionListBoxData();
         }
 
         private void LoadMedicalConditionListBoxData()
         {
             medicalConditionListBox.Items.Clear();
-            var allMedicalConditions = db.MedicalConditions.ToList();
+            var _allMedicalConditions = m_db.MedicalConditions.ToList();
 
-            foreach (var medicalCondition in allMedicalConditions)
+            foreach (var _medicalCondition in _allMedicalConditions)
             {
-                medicalConditionListBox.Items.Add(medicalCondition.Name);
+                medicalConditionListBox.Items.Add(_medicalCondition.Name);
             }
         }
 
@@ -47,19 +47,19 @@ namespace HospitalManagement.Forms.DoctorForms
             else
             {
                 // винаги запаметяваме заболяванията с главни букви -> .ToUpperInvariant()
-                var medicalCondition = new MedicalCondition()
+                var _medicalCondition = new MedicalCondition()
                 {
                     Name = medicalConditionNameTextBox.Text.ToUpperInvariant()
                 };
 
-                if (db.MedicalConditions.FirstOrDefault(x => x.Name == medicalCondition.Name) != null)
+                if (m_db.MedicalConditions.FirstOrDefault(x => x.Name == _medicalCondition.Name) != null)
                 {
                     MessageBox.Show("Вече съществува такова заболяване!", "Грешка.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    await db.MedicalConditions.AddAsync(medicalCondition);
-                    await db.SaveChangesAsync();
+                    await m_db.MedicalConditions.AddAsync(_medicalCondition);
+                    await m_db.SaveChangesAsync();
                     LoadMedicalConditionListBoxData();
                     MessageBox.Show("Вие успешно създадохте ново заболяване. Вече можете да създавате пациенти, които го притежават!", "Успешно създадено ново заболяване.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -73,19 +73,19 @@ namespace HospitalManagement.Forms.DoctorForms
             }
             else
             {
-                var result = MessageBox.Show("Наистина ли искате да изтриете това заболяване? Всички пациенти страдащи от него вече няма да го имат. Искате ли да продължите?", "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var _result = MessageBox.Show("Наистина ли искате да изтриете това заболяване? Всички пациенти страдащи от него вече няма да го имат. Искате ли да продължите?", "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-                if (result == DialogResult.Yes)
+                if (_result == DialogResult.Yes)
                 {
                     // дай ми единственото заболяване с такова име
-                    var selectedMedicalCondition = db.MedicalConditions.Single(x => x.Name == medicalConditionListBox.SelectedItem.ToString());
-                    var patientsWithMedicalCondition = db.Patients.Include(x => x.MedicalCondition).Where(x => x.MedicalConditionId == selectedMedicalCondition.Id);
-                    foreach (var patient in patientsWithMedicalCondition)
+                    var _selectedMedicalCondition = m_db.MedicalConditions.Single(x => x.Name == medicalConditionListBox.SelectedItem.ToString());
+                    var _patientsWithMedicalCondition = m_db.Patients.Include(x => x.MedicalCondition).Where(x => x.MedicalConditionId == _selectedMedicalCondition.Id);
+                    foreach (var _patient in _patientsWithMedicalCondition)
                     {
-                        patient.MedicalConditionId = null;
+                        _patient.MedicalConditionId = null;
                     }
-                    db.MedicalConditions.Remove(selectedMedicalCondition);
-                    await db.SaveChangesAsync();
+                    m_db.MedicalConditions.Remove(_selectedMedicalCondition);
+                    await m_db.SaveChangesAsync();
                     LoadMedicalConditionListBoxData();
                 }
             }

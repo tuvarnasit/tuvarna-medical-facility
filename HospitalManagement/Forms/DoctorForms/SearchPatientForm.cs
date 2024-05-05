@@ -14,18 +14,18 @@ namespace HospitalManagement.Forms.DoctorForms
 {
     public partial class SearchPatientForm : Form
     {
-        private ApplicationDbContext db;
-        private Action<Form> openChildForm;
-        private int currentLoggedInDoctorId;
+        private ApplicationDbContext m_db;
+        private Action<Form>         m_openChildForm;
+        private int                  m_currentLoggedInDoctorId;
         public SearchPatientForm()
         {
             InitializeComponent();
         }
         public SearchPatientForm(ApplicationDbContext db, Action<Form> openChildForm, int currentLoggedInDoctorId) : this()
         {
-            this.db = db;
-            this.openChildForm = openChildForm;
-            this.currentLoggedInDoctorId = currentLoggedInDoctorId;
+            this.m_db = db;
+            this.m_openChildForm = openChildForm;
+            this.m_currentLoggedInDoctorId = currentLoggedInDoctorId;
             PopulateSearchCriteriaListBox();
         }
         private void PopulateSearchCriteriaListBox()
@@ -50,60 +50,60 @@ namespace HospitalManagement.Forms.DoctorForms
                 return;
             }
 
-            var foundPatientsList = new List<Patient>();
-            var searchCriteria = searchCriteriaListBox.SelectedItem.ToString();
-            var searchTerm = searchTextBox.Text;
-            switch (searchCriteria)
+            var _foundPatientsList = new List<Patient>();
+            var _searchCriteria = searchCriteriaListBox.SelectedItem.ToString();
+            var _searchTerm = searchTextBox.Text;
+            switch (_searchCriteria)
             {
                 case "ЕГН":
                     {
-                        var patient = db.Patients.SingleOrDefault(p => p.EGN == searchTerm);
+                        var patient = m_db.Patients.SingleOrDefault(p => p.EGN == _searchTerm);
                         if (patient != null)
                         {
-                            foundPatientsList.Add(patient);
+                            _foundPatientsList.Add(patient);
                         }
                         break;
                     }
                 case "Първо име":
                     {
-                        var patients = db.Patients.Where(p => p.FirstName == searchTerm).ToList();
+                        var patients = m_db.Patients.Where(p => p.FirstName == _searchTerm).ToList();
                         foreach (var patient in patients)
                         {
-                            foundPatientsList.Add(patient);
+                            _foundPatientsList.Add(patient);
                         }
                         break;
                     }
                 case "Презиме":
                     {
-                        var patients = db.Patients.Where(p => p.MiddleName == searchTerm).ToList();
+                        var patients = m_db.Patients.Where(p => p.MiddleName == _searchTerm).ToList();
                         foreach (var patient in patients)
                         {
-                            foundPatientsList.Add(patient);
+                            _foundPatientsList.Add(patient);
                         }
                         break;
                     }
                 case "Фамилия":
                     {
-                        var patients = db.Patients.Where(p => p.LastName == searchTerm).ToList();
+                        var patients = m_db.Patients.Where(p => p.LastName == _searchTerm).ToList();
                         foreach (var patient in patients)
                         {
-                            foundPatientsList.Add(patient);
+                            _foundPatientsList.Add(patient);
                         }
                         break;
                     }
                 case "Заболяване":
                     {
-                        var medicalCondition = db.MedicalConditions.SingleOrDefault(x => x.Name == searchTerm.ToUpper());
+                        var medicalCondition = m_db.MedicalConditions.SingleOrDefault(x => x.Name == _searchTerm.ToUpper());
                         if (medicalCondition == null)
                         {
                             MessageBox.Show("Таково заболяване не съществува.", "Грешка.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
-                        var patients = db.Patients.Include(p=>p.MedicalCondition).Where(p => p.MedicalCondition.Name == searchTerm.ToUpper()).ToList();
+                        var patients = m_db.Patients.Include(p=>p.MedicalCondition).Where(p => p.MedicalCondition.Name == _searchTerm.ToUpper()).ToList();
                         foreach (var patient in patients)
                         {
-                            foundPatientsList.Add(patient);
+                            _foundPatientsList.Add(patient);
                         }
                         break;
                     }
@@ -112,7 +112,7 @@ namespace HospitalManagement.Forms.DoctorForms
 
             }
 
-            if (foundPatientsList.Count() == 0)
+            if (_foundPatientsList.Count() == 0)
             {
                 foundPatientsListBox.Items.Clear();
                 MessageBox.Show("Няма намерени пациенти по този критерий.", "Не бяха намерени пациенти.", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -122,11 +122,11 @@ namespace HospitalManagement.Forms.DoctorForms
             {
                 foundPatientsListBox.Items.Clear();
 
-                foreach (var patient in foundPatientsList)
+                foreach (var _patient in _foundPatientsList)
                 {
-                    foundPatientsListBox.Items.Add(patient.EGN);
+                    foundPatientsListBox.Items.Add(_patient.EGN);
                 }
-                MessageBox.Show("Бяха намерени " + foundPatientsList.Count() + " пациента.", "Има намерени пациенти.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Бяха намерени " + _foundPatientsList.Count() + " пациента.", "Има намерени пациенти.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
         }
@@ -140,10 +140,10 @@ namespace HospitalManagement.Forms.DoctorForms
         }
         private Patient GetSelectedPatient()
         {
-            var selectedPatientEGN = foundPatientsListBox.SelectedItem.ToString();
+            var _selectedPatientEGN = foundPatientsListBox.SelectedItem.ToString();
             // .Single() тъй като егн-тата неможе да са еднакви на двама пациента
             // .Include() зада заредим заболяването на пациента/ ако той има такова ествествено
-            return db.Patients.Include(p=>p.MedicalCondition).Single(p => p.EGN == selectedPatientEGN);
+            return m_db.Patients.Include(p=>p.MedicalCondition).Single(p => p.EGN == _selectedPatientEGN);
         }
         private void showSelectedPatientButton_Click(object sender, EventArgs e)
         {
@@ -152,8 +152,8 @@ namespace HospitalManagement.Forms.DoctorForms
                 MessageBox.Show("Трябва да изберете пациент първо.", "Не сте избрали пациент.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var selectedPatient = GetSelectedPatient();
-            openChildForm(new ShowPatientForm(db, selectedPatient));
+            var _selectedPatient = GetSelectedPatient();
+            m_openChildForm(new ShowPatientForm(m_db, _selectedPatient));
         }
         private void editSelectedPatientButton_Click(object sender, EventArgs e)
         {
@@ -162,8 +162,8 @@ namespace HospitalManagement.Forms.DoctorForms
                 MessageBox.Show("Трябва да изберете пациент първо.", "Не сте избрали пациент.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var selectedPatient = GetSelectedPatient();
-            openChildForm(new EditPatientForm(db, selectedPatient));
+            var _selectedPatient = GetSelectedPatient();
+            m_openChildForm(new EditPatientForm(m_db, _selectedPatient));
         }
 
         private async void deleteSelectedPatientButton_Click(object sender, EventArgs e)
@@ -173,15 +173,15 @@ namespace HospitalManagement.Forms.DoctorForms
                 MessageBox.Show("Трябва да изберете пациент първо.", "Не сте избрали пациент.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var selectedPatient = GetSelectedPatient();
-            var result = MessageBox.Show("Вмомента сте на път да изтриете пациента с ЕГН " + selectedPatient.EGN + ". Това ще изтрие и всичките му рецепти. Искате ли да изтриете този пациент?", "Сигурни ли сте че искате да изтриете този пациент?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var _selectedPatient = GetSelectedPatient();
+            var _result = MessageBox.Show("Вмомента сте на път да изтриете пациента с ЕГН " + _selectedPatient.EGN + ". Това ще изтрие и всичките му рецепти. Искате ли да изтриете този пациент?", "Сигурни ли сте че искате да изтриете този пациент?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            if (result == DialogResult.Yes)
+            if (_result == DialogResult.Yes)
             {
-                var patientToDelete = db.Patients.Single(p => p.EGN == selectedPatient.EGN);
-                db.Patients.Remove(patientToDelete);
-                await db.SaveChangesAsync();
-                foundPatientsListBox.Items.Remove(patientToDelete.EGN);
+                var _patientToDelete = m_db.Patients.Single(p => p.EGN == _selectedPatient.EGN);
+                m_db.Patients.Remove(_patientToDelete);
+                await m_db.SaveChangesAsync();
+                foundPatientsListBox.Items.Remove(_patientToDelete.EGN);
             }
         }
 
@@ -192,8 +192,8 @@ namespace HospitalManagement.Forms.DoctorForms
                 MessageBox.Show("Трябва да изберете пациент първо.", "Не сте избрали пациент.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var selectedPatient = GetSelectedPatient();
-            openChildForm(new CreatePrescriptionForm(db, currentLoggedInDoctorId, selectedPatient));
+            var _selectedPatient = GetSelectedPatient();
+            m_openChildForm(new CreatePrescriptionForm(m_db, m_currentLoggedInDoctorId, _selectedPatient));
         }
 
         private void showSelectedPatientPrescriptionsButton_Click(object sender, EventArgs e)
@@ -203,8 +203,8 @@ namespace HospitalManagement.Forms.DoctorForms
                 MessageBox.Show("Трябва да изберете пациент първо.", "Не сте избрали пациент.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var selectedPatient = GetSelectedPatient();
-            openChildForm(new ShowPrescriptionsOfPatient(db, selectedPatient));
+            var _selectedPatient = GetSelectedPatient();
+            m_openChildForm(new ShowPrescriptionsOfPatient(m_db, _selectedPatient));
         }
     }
 }

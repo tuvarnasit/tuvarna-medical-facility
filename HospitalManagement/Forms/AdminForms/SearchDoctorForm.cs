@@ -14,13 +14,13 @@ namespace HospitalManagement.Forms.AdminForms
 {
     public partial class SearchDoctorForm : Form
     {
-        private ApplicationDbContext db;
+        private ApplicationDbContext m_db;
 
         // тези полета ги използваме за да може да предадем от AdminPanel методи, които
         // да се изпълнят при изпълняването на event handler-ите, които отговарят
         // при кликане на съответен бутон
         // накратко даваме код ОТВЪН, който да се изпълни при кликането на бутоните.
-        private Action<Form> openChildForm;
+        private Action<Form>         m_openChildForm;
         public SearchDoctorForm()
         {
             InitializeComponent();
@@ -28,10 +28,10 @@ namespace HospitalManagement.Forms.AdminForms
         // в конструктора задължаваме на външния клас, който прави инстанция на този клас
         // да предаде методите, които да се изпълнят при кликане на бутоните
         // за показване на доктор/ редактиране на доктор/ изтриване на доктор
-        public SearchDoctorForm(ApplicationDbContext db, Action<Form> openChildForm) : this()
+        public SearchDoctorForm(ApplicationDbContext t_db, Action<Form> t_openChildForm) : this()
         {
-            this.db = db;
-            this.openChildForm = openChildForm;
+            this.m_db = t_db;
+            this.m_openChildForm = t_openChildForm;
             PopulateSearchCriteriaListBox();
         }
         private void PopulateSearchCriteriaListBox()
@@ -56,10 +56,10 @@ namespace HospitalManagement.Forms.AdminForms
                 return;
             }
 
-            var foundDoctorsList = new List<Doctor>();
-            var searchCriteria = searchCriteriaListBox.SelectedItem.ToString();
-            var searchTerm = searchTextBox.Text;
-            switch (searchCriteria)
+            var _foundDoctorsList = new List<Doctor>();
+            var _searchCriteria = searchCriteriaListBox.SelectedItem.ToString();
+            var _searchTerm = searchTextBox.Text;
+            switch (_searchCriteria)
             {
                 case "Имейл":
                     {
@@ -68,19 +68,19 @@ namespace HospitalManagement.Forms.AdminForms
                         // трябва да имаме само един User с такъв имейл
                         // ако не бъде намерен 1 такъв User, то ми върни NULL
                         // също така зареди ми Role полето на User-а с .Include() че да имам достъп до името на ролята на usera
-                        var user = db.Users.Include(u => u.Role).SingleOrDefault(u => u.Email == searchTerm);
-                        if (user != null)
+                        var _user = m_db.Users.Include(u => u.Role).SingleOrDefault(u => u.Email == _searchTerm);
+                        if (_user != null)
                         {
                             // ако ролята е доктор
-                            if (user.Role.Name.ToLower() == "doctor")
+                            if (_user.Role.Name.ToLower() == "doctor")
                             {
                                 // намери информацията за доктора, който отговаря на съответния user
                                 // използваме Single(), тъй като връзката ни е едно към едно
                                 // и не би трябвало да има друг доктор с Id на намерения user
                                 // всеки един доктор отговаря на точно един user - не по малко/ не повече
 
-                                var doctor = db.Doctors.Single(d => d.UserId == user.Id);
-                                foundDoctorsList.Add(doctor);
+                                var doctor = m_db.Doctors.Single(d => d.UserId == _user.Id);
+                                _foundDoctorsList.Add(doctor);
                             }
                             // ако ролята не му е доктор, не бива да го добавяме към списъка с намерени доктори
                         }
@@ -89,28 +89,28 @@ namespace HospitalManagement.Forms.AdminForms
                 case "Първо име":
                     {
                         // ползваме .Where за да намерим колекция от доктори, които притежават това име
-                        var doctors = db.Doctors.Where(d => d.FirstName == searchTerm).ToList();
-                        if (doctors != null && doctors.Count != 0)
+                        var _doctors = m_db.Doctors.Where(d => d.FirstName == _searchTerm).ToList();
+                        if (_doctors != null && _doctors.Count != 0)
                         {
-                            foundDoctorsList.AddRange(doctors);
+                            _foundDoctorsList.AddRange(_doctors);
                         }
                         break;
                     }
                 case "Презиме":
                     {
-                        var doctors = db.Doctors.Where(d => d.MiddleName == searchTerm).ToList();
-                        if (doctors != null && doctors.Count != 0)
+                        var _doctors = m_db.Doctors.Where(d => d.MiddleName == _searchTerm).ToList();
+                        if (_doctors != null && _doctors.Count != 0)
                         {
-                            foundDoctorsList.AddRange(doctors);
+                            _foundDoctorsList.AddRange(_doctors);
                         }
                         break;
                     }
                 case "Фамилия":
                     {
-                        var doctors = db.Doctors.Where(d => d.LastName == searchTerm).ToList();
-                        if (doctors != null && doctors.Count != 0)
+                        var _doctors = m_db.Doctors.Where(d => d.LastName == _searchTerm).ToList();
+                        if (_doctors != null && _doctors.Count != 0)
                         {
-                            foundDoctorsList.AddRange(doctors);
+                            _foundDoctorsList.AddRange(_doctors);
                         }
                         break;
                     }
@@ -120,17 +120,17 @@ namespace HospitalManagement.Forms.AdminForms
                         // защото би трябвало да имаме не повече от 1 специалност с такова име в базата
                         // и защото ако не бъде намерена 1 специалност, то да ми върне NULL
 
-                        var doctorSpeciality = db.DoctorSpecialities.SingleOrDefault(x => x.Name == searchTerm.ToUpper());
-                        if (doctorSpeciality == null)
+                        var _doctorSpeciality = m_db.DoctorSpecialities.SingleOrDefault(x => x.Name == _searchTerm.ToUpper());
+                        if (_doctorSpeciality == null)
                         {
                             MessageBox.Show("Такава докторска специалност не съществува.", "Грешка.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
-                        var doctors = db.Doctors.Include(d => d.DoctorSpeciality).Where(d => d.DoctorSpeciality.Name == searchTerm.ToUpper()).ToList();
-                        if (doctors != null && doctors.Count != 0)
+                        var _doctors = m_db.Doctors.Include(d => d.DoctorSpeciality).Where(d => d.DoctorSpeciality.Name == _searchTerm.ToUpper()).ToList();
+                        if (_doctors != null && _doctors.Count != 0)
                         {
-                            foundDoctorsList.AddRange(doctors);
+                            _foundDoctorsList.AddRange(_doctors);
                         }
                         break;
                     }
@@ -141,7 +141,7 @@ namespace HospitalManagement.Forms.AdminForms
 
             }
 
-            if (foundDoctorsList.Count() == 0)
+            if (_foundDoctorsList.Count() == 0)
             {
                 foundDoctorsListBox.Items.Clear();
                 MessageBox.Show("Няма намерени доктори по този критерий.", "Не бяха намерени доктори.", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -151,7 +151,7 @@ namespace HospitalManagement.Forms.AdminForms
             {
                 foundDoctorsListBox.Items.Clear();
 
-                foreach (var doctor in foundDoctorsList)
+                foreach (var _doctor in _foundDoctorsList)
                 {
                     // зареди ми имейла на User профила на намерения доктор
                     // ползваме Single() тъй като знаем че щом имаме намерени доктори
@@ -161,10 +161,10 @@ namespace HospitalManagement.Forms.AdminForms
                     // един User съответства на един Doctor
                     // и е невъзможно един и същи User да отговаря на повече от един доктор
                     // заради дизайна на базата (foreign key-a към User-ите е UNIQUE, не може да се повтаря)
-                    var user = db.Users.Single(x => x.Id == doctor.UserId);
-                    foundDoctorsListBox.Items.Add(user.Email);
+                    var _user = m_db.Users.Single(x => x.Id == _doctor.UserId);
+                    foundDoctorsListBox.Items.Add(_user.Email);
                 }
-                MessageBox.Show("Бяха намерени " + foundDoctorsList.Count() + " доктора.", "Има намерени доктори.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Бяха намерени " + _foundDoctorsList.Count() + " доктора.", "Има намерени доктори.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
         }
@@ -178,8 +178,8 @@ namespace HospitalManagement.Forms.AdminForms
         }
         private User GetSelectedUser()
         {
-            var selectedEmail = foundDoctorsListBox.SelectedItem.ToString();
-            return db.Users.Single(u => u.Email == selectedEmail);
+            var _selectedEmail = foundDoctorsListBox.SelectedItem.ToString();
+            return m_db.Users.Single(u => u.Email == _selectedEmail);
         }
         private void showSelectedDoctorButton_Click(object sender, EventArgs e)
         {
@@ -188,8 +188,8 @@ namespace HospitalManagement.Forms.AdminForms
                 MessageBox.Show("Трябва да изберете доктор първо.", "Не сте избрали доктор.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var selectedUser = GetSelectedUser();
-            openChildForm(new ShowDoctorForm(db, selectedUser));
+            var _selectedUser = GetSelectedUser();
+            m_openChildForm(new ShowDoctorForm(m_db, _selectedUser));
         }
         private void editSelectedDoctorButton_Click(object sender, EventArgs e)
         {
@@ -198,8 +198,8 @@ namespace HospitalManagement.Forms.AdminForms
                 MessageBox.Show("Трябва да изберете доктор първо.", "Не сте избрали доктор.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var selectedUser = GetSelectedUser();
-            openChildForm(new EditDoctorForm(db, selectedUser));
+            var _selectedUser = GetSelectedUser();
+            m_openChildForm(new EditDoctorForm(m_db, _selectedUser));
         }
 
         private async void deleteSelectedDoctorButton_Click(object sender, EventArgs e)
@@ -209,15 +209,15 @@ namespace HospitalManagement.Forms.AdminForms
                 MessageBox.Show("Трябва да изберете доктор първо.", "Не сте избрали доктор.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var selectedUser = GetSelectedUser();
-            var result = MessageBox.Show("Вмомента сте на път да изтриете доктора " +selectedUser.Email + ". Това ще изтрие и всичките негови рецепти. Искате ли да изтриете този доктор?", "Сигурни ли сте че искате да изтриете този доктор?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var _selectedUser = GetSelectedUser();
+            var _result = MessageBox.Show("Вмомента сте на път да изтриете доктора " + _selectedUser.Email + ". Това ще изтрие и всичките негови рецепти. Искате ли да изтриете този доктор?", "Сигурни ли сте че искате да изтриете този доктор?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            if (result == DialogResult.Yes)
+            if (_result == DialogResult.Yes)
             {
-                var userToDelete = db.Users.Single(u => u.Id == selectedUser.Id);
-                db.Users.Remove(userToDelete);
-                await db.SaveChangesAsync();
-                foundDoctorsListBox.Items.Remove(selectedUser.Email);
+                var userToDelete = m_db.Users.Single(u => u.Id == _selectedUser.Id);
+                m_db.Users.Remove(userToDelete);
+                await m_db.SaveChangesAsync();
+                foundDoctorsListBox.Items.Remove(_selectedUser.Email);
             }
         }
     }

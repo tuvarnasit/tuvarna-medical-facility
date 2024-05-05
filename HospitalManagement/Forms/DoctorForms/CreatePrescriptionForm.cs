@@ -13,9 +13,9 @@ namespace HospitalManagement.Forms.DoctorForms
 {
     public partial class CreatePrescriptionForm : Form
     {
-        private ApplicationDbContext db;
-        private int doctorId;
-        private int patientId;
+        private ApplicationDbContext m_db;
+        private int                  m_doctorId;
+        private int                  m_patientId;
 
         public CreatePrescriptionForm()
         {
@@ -23,16 +23,16 @@ namespace HospitalManagement.Forms.DoctorForms
         }
 
         // доктор Id и patient Id трябва винаги да са валидни
-        public CreatePrescriptionForm(ApplicationDbContext db, int doctorId, Patient patient) : this()
+        public CreatePrescriptionForm(ApplicationDbContext t_db, int t_doctorId, Patient t_patient) : this()
         {
-            this.db = db;
-            this.doctorId = doctorId;
-            this.patientId = patient.Id;
+            this.m_db                   = t_db;
+            this.m_doctorId             = t_doctorId;
+            this.m_patientId            = t_patient.Id;
 
-            this.egnTextBox.Text = patient.EGN;
-            this.firstNameTextBox.Text = patient.FirstName;
-            this.middleNameTextBox.Text = patient.MiddleName;
-            this.lastNameTextBox.Text = patient.LastName;
+            this.egnTextBox.Text        = t_patient.EGN;
+            this.firstNameTextBox.Text  = t_patient.FirstName;
+            this.middleNameTextBox.Text = t_patient.MiddleName;
+            this.lastNameTextBox.Text   = t_patient.LastName;
         }
         private async void createPrescriptionButton_Click(object sender, EventArgs e)
         {
@@ -44,14 +44,14 @@ namespace HospitalManagement.Forms.DoctorForms
 
             var prescription = new Prescription()
             {
-                DoctorId = doctorId,
-                PatientId = patientId,
-                PrescriptionText = prescriptionTextBox.Text,
-                DateCreated = DateTime.UtcNow.ToShortDateString()
+                DoctorId            = m_doctorId,
+                PatientId           = m_patientId,
+                PrescriptionText    = prescriptionTextBox.Text,
+                DateCreated         = DateTime.UtcNow.ToShortDateString()
             };
 
-            await db.Prescriptions.AddAsync(prescription);
-            await db.SaveChangesAsync();
+            await m_db.Prescriptions.AddAsync(prescription);
+            await m_db.SaveChangesAsync();
             prescriptionTextBox.Text = "";
             MessageBox.Show("Успешно създадохте рецепта за този пациент.", "Успешно създадена рецепта.", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

@@ -13,29 +13,29 @@ namespace HospitalManagement.Forms.DoctorForms
 {
     public partial class ShowPrescriptionsOfPatient : Form
     {
-        private ApplicationDbContext db;
+        private ApplicationDbContext m_db;
 
         public ShowPrescriptionsOfPatient()
         {
             InitializeComponent();
         }
 
-        public ShowPrescriptionsOfPatient(ApplicationDbContext db, Patient patient):this()
+        public ShowPrescriptionsOfPatient(ApplicationDbContext t_db, Patient t_patient) :this()
         {
-            this.db = db;
+            this.m_db                    = t_db;
+            this.egnTextBox.Text         = t_patient.EGN;
+            var _allPatientPrescriptions = t_db.Prescriptions.Where(p => p.PatientId == t_patient.Id).ToList();
 
-            this.egnTextBox.Text = patient.EGN;
-            var allPatientPrescriptions = db.Prescriptions.Where(p => p.PatientId == patient.Id).ToList();
-            if (allPatientPrescriptions.Count==0)
+            if (_allPatientPrescriptions.Count == 0)
             {
                 allPatientPrescriptionsListBox.Items.Add("няма");
                 prescriptionTextBox.Text = "няма";
             }
             else
             {
-                foreach (var prescription in allPatientPrescriptions)
+                foreach (var _prescription in _allPatientPrescriptions)
                 {
-                    allPatientPrescriptionsListBox.Items.Add(prescription.Id);
+                    allPatientPrescriptionsListBox.Items.Add(_prescription.Id);
                 }
                 allPatientPrescriptionsListBox.SelectedIndexChanged += allPatientPrescriptionsListBox_SelectedIndexChanged;
             }
@@ -43,9 +43,9 @@ namespace HospitalManagement.Forms.DoctorForms
 
         private void allPatientPrescriptionsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var prescriptionId = (int)allPatientPrescriptionsListBox.SelectedItem;
-            var prescription = db.Prescriptions.Single(p => p.Id == prescriptionId);
-            prescriptionTextBox.Text = prescription.PrescriptionText;
+            var _prescriptionId       = (int)allPatientPrescriptionsListBox.SelectedItem;
+            var _prescription         = m_db.Prescriptions.Single(p => p.Id == _prescriptionId);
+            prescriptionTextBox.Text  = _prescription.PrescriptionText;
         }
     }
 }

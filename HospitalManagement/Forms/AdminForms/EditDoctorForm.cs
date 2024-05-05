@@ -14,49 +14,49 @@ namespace HospitalManagement.Forms.AdminForms
 {
     public partial class EditDoctorForm : Form
     {
-        private ApplicationDbContext db;
-        private List<Control> editDoctorControls;
-        private User userInfoToEdit;
-        private Doctor doctorInfoToEdit;
+        private ApplicationDbContext m_db;
+        private List<Control>        m_editDoctorControls;
+        private User                 m_userInfoToEdit;
+        private Doctor               m_doctorInfoToEdit;
         public EditDoctorForm()
         {
             InitializeComponent();
         }
         // тази форма трябва да се ползва само със User-и, които са в роля Doctor
         // ако сложим user с друга роля ще получим грешка, имай го на предвид
-        public EditDoctorForm(ApplicationDbContext db, User user):this()
+        public EditDoctorForm(ApplicationDbContext t_db, User t_user):this()
         {
-            this.db = db;
+            this.m_db = t_db;
             LoadSpecialityListBoxData();
             PopulateEditDoctorControls();
 
             // вземи информацията на доктора за съответния user
             // знаем че ползваме .Single() понеже имаме връзка едно към едно
             // точно това би хвърлило грешката ако user-а всъщност няма докторски акаунт
-            var doctorInfo = db.Doctors
+            var _doctorInfo = m_db.Doctors
                 .Include(d => d.DoctorSpeciality)
-                .Single(d => d.UserId == user.Id);
+                .Single(d => d.UserId == t_user.Id);
 
             // сложи индекса на избраната специалност да е специалността на доктора
-            var index = this.specialityListBox.Items.IndexOf(doctorInfo.DoctorSpeciality.Name);
-            specialityListBox.SelectedIndex = index;
+            var _index = this.specialityListBox.Items.IndexOf(_doctorInfo.DoctorSpeciality.Name);
+            specialityListBox.SelectedIndex = _index;
 
             // попълни и другите данни на доктора
-            emailTextBox.Text = user.Email;
-            passwordTextBox.Text = user.Password;
-            firstNameTextBox.Text = doctorInfo.FirstName;
-            middleNameTextBox.Text=doctorInfo.MiddleName;
-            lastNameTextBox.Text = doctorInfo.LastName;
+            emailTextBox.Text       = t_user.Email;
+            passwordTextBox.Text    = t_user.Password;
+            firstNameTextBox.Text   = _doctorInfo.FirstName;
+            middleNameTextBox.Text  = _doctorInfo.MiddleName;
+            lastNameTextBox.Text    = _doctorInfo.LastName;
 
-            this.userInfoToEdit = user;
-            this.doctorInfoToEdit = doctorInfo;
+            this.m_userInfoToEdit   = t_user;
+            this.m_doctorInfoToEdit = _doctorInfo;
 
         }
 
         private void LoadSpecialityListBoxData()
         {
             specialityListBox.Items.Clear();
-            var allDoctorSpecialities = db.DoctorSpecialities.ToList();
+            var allDoctorSpecialities = m_db.DoctorSpecialities.ToList();
 
             foreach (var speciality in allDoctorSpecialities)
             {
@@ -66,12 +66,12 @@ namespace HospitalManagement.Forms.AdminForms
 
         private void PopulateEditDoctorControls()
         {
-            editDoctorControls = new List<Control>();
-            editDoctorControls.Add(emailTextBox);
-            editDoctorControls.Add(passwordTextBox);
-            editDoctorControls.Add(firstNameTextBox);
-            editDoctorControls.Add(middleNameTextBox);
-            editDoctorControls.Add(lastNameTextBox);
+            m_editDoctorControls = new List<Control>();
+            m_editDoctorControls.Add(emailTextBox);
+            m_editDoctorControls.Add(passwordTextBox);
+            m_editDoctorControls.Add(firstNameTextBox);
+            m_editDoctorControls.Add(middleNameTextBox);
+            m_editDoctorControls.Add(lastNameTextBox);
         }
 
         private async void editDoctorButton_Click(object sender, EventArgs e)
@@ -82,43 +82,43 @@ namespace HospitalManagement.Forms.AdminForms
             }
             else
             {
-                var dbUser = db.Users.Single(u => u.Id == userInfoToEdit.Id);
-                var dbDoctor = db.Doctors.Single(d => d.Id == doctorInfoToEdit.Id);
+                var _dbUser     = m_db.Users.Single(u => u.Id == m_userInfoToEdit.Id);
+                var _dbDoctor   = m_db.Doctors.Single(d => d.Id == m_userInfoToEdit.Id);
 
-                var currentSelectedSpeciality = specialityListBox.SelectedItem.ToString();
-                var doctorSpeciality = db.DoctorSpecialities.Single(x => x.Name == currentSelectedSpeciality);
+                var _currentSelectedSpeciality  = specialityListBox.SelectedItem.ToString();
+                var _doctorSpeciality           = m_db.DoctorSpecialities.Single(x => x.Name == _currentSelectedSpeciality);
 
                 // редактирай User профила на доктора
 
                 // провери дали вече има друг user с такъв имейл
 
-                var dbUserWithNewEmail = db.Users.SingleOrDefault(u => u.Email == emailTextBox.Text);
+                var _dbUserWithNewEmail = m_db.Users.SingleOrDefault(u => u.Email == emailTextBox.Text);
                 // ако не е NULL значи има такъв user с такъв имейл
-                if (dbUserWithNewEmail != null) 
+                if (_dbUserWithNewEmail != null) 
                 {
                     // ако Id-то на Userа който едитваме НЕ Е равно на Id-то на usera с новия имейл
                     // то тогава значи че това са два различни Usera
                     // тоест вече има регистриран User с този имейл
                     // и съответно не можем да променим този който редактираме на него.
-                    if (dbUser.Id != dbUserWithNewEmail.Id)
+                    if (_dbUser.Id != _dbUserWithNewEmail.Id)
                     {
                         MessageBox.Show("Вече има такъв регистриран потребител с този имейл. Моля пробвайте друг.", "Грешка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
 
-                dbUser.Email = emailTextBox.Text;
-                dbUser.Password = passwordTextBox.Text;
+                _dbUser.Email       = emailTextBox.Text;
+                _dbUser.Password    = passwordTextBox.Text;
 
-                await db.SaveChangesAsync();
+                await m_db.SaveChangesAsync();
 
                 // редактирай самата информация на доктора
-                dbDoctor.FirstName = firstNameTextBox.Text;
-                dbDoctor.MiddleName = middleNameTextBox.Text;
-                dbDoctor.LastName = lastNameTextBox.Text;
-                dbDoctor.DoctorSpecialityId = doctorSpeciality.Id;
+                _dbDoctor.FirstName             = firstNameTextBox.Text;
+                _dbDoctor.MiddleName            = middleNameTextBox.Text;
+                _dbDoctor.LastName              = lastNameTextBox.Text;
+                _dbDoctor.DoctorSpecialityId    = _doctorSpeciality.Id;
 
-                await db.SaveChangesAsync();
+                await m_db.SaveChangesAsync();
 
                 MessageBox.Show("Вие успешно редактирахте този докторски акаунт.", "Успешно редактиран докторски акаунт", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -131,10 +131,10 @@ namespace HospitalManagement.Forms.AdminForms
                 return false;
             }
 
-            foreach (var control in editDoctorControls)
+            foreach (var _control in m_editDoctorControls)
             {
                 // за всеки един TextBox ако текста само на един даже да не е попълнен
-                if (string.IsNullOrWhiteSpace(control.Text))
+                if (string.IsNullOrWhiteSpace(_control.Text))
                 {
                     // върни false че не е попълнен
                     return false;

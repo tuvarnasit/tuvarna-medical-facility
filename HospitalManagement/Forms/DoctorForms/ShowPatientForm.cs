@@ -14,26 +14,27 @@ namespace HospitalManagement.Forms.DoctorForms
 {
     public partial class ShowPatientForm : Form
     {
-        private ApplicationDbContext db;
+        private ApplicationDbContext m_db;
         public ShowPatientForm()
         {
             InitializeComponent();
         }
-        public ShowPatientForm(ApplicationDbContext db, Patient patient):this()
+        public ShowPatientForm(ApplicationDbContext t_db, Patient t_patient):this()
         {
-            this.db = db;
+            this.m_db = t_db;
 
-            var patientPrescriptionsCount = db.Prescriptions
-                .Where(p => p.PatientId == patient.Id)
+            var _patientPrescriptionsCount = t_db.Prescriptions
+                .Where(p => p.PatientId == t_patient.Id)
                 .Count();
 
-            this.firstNameLabel.Text += patient.FirstName;
-            this.middleNameLabel.Text += patient.MiddleName;
-            this.lastNameLabel.Text += patient.LastName;
-            this.prescriptionsAmountLabel.Text += patientPrescriptionsCount;
-            if (patient.MedicalCondition!=null)
+            this.firstNameLabel.Text            += t_patient.FirstName;
+            this.middleNameLabel.Text           += t_patient.MiddleName;
+            this.lastNameLabel.Text             += t_patient.LastName;
+            this.prescriptionsAmountLabel.Text  += _patientPrescriptionsCount;
+
+            if (t_patient.MedicalCondition != null)
             {
-                this.medicalConditionLabel.Text += patient.MedicalCondition.Name;
+                this.medicalConditionLabel.Text += t_patient.MedicalCondition.Name;
             }
             else
             {
