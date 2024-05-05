@@ -4,6 +4,18 @@
 
 This Medical Facility Management System is designed to streamline the operations of a medical center by providing digital management of patient and doctor records. The system features distinct access roles and multiple functionalities tailored to each user type, enhancing the administrative and operational efficiency of the facility.
 
+## Default Login Credentials
+
+To access the system, use the following credentials based on your role:
+
+- **Doctor Access**
+  - **Email**: `doctor123@gmail.com`
+  - **Password**: `doctor123`
+
+- **Admin Access**
+  - **Email**: `admin123@gmail.com`
+  - **Password**: `admin123`
+
 ## Features
 
 ### Login Form
