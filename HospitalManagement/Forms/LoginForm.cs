@@ -10,17 +10,17 @@ namespace HospitalManagement.Forms
         {
             InitializeComponent();
         }
-        public LoginForm(ApplicationDbContext t_db):this() // преизползвай празния конструктор
+        public LoginForm(ApplicationDbContext t_db) : this() // преизползвай празния конструктор
         {
             this.m_db = t_db;
         }
         private void loginButton_Click(object sender, EventArgs e)
         {
-            var _email    = emailTextBox.Text;
+            var _email = emailTextBox.Text;
             var _password = passwordTextBox.Text;
 
             User _user = LoginUser(_email, _password);
-            if (_user != null) 
+            if (_user != null)
             {
                 Form _formToDisplay;
                 switch (_user.Role.Name.ToLower()) // за всеки случай ако ролите са в друг case

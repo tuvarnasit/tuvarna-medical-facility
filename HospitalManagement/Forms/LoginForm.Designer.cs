@@ -29,155 +29,155 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.emailTextBox = new System.Windows.Forms.TextBox();
-            this.errorLabel = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.loginButton = new System.Windows.Forms.Button();
-            this.passwordTextBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.SuspendLayout();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            panel1 = new Panel();
+            emailTextBox = new TextBox();
+            errorLabel = new Label();
+            label2 = new Label();
+            loginButton = new Button();
+            passwordTextBox = new TextBox();
+            label3 = new Label();
+            label1 = new Label();
+            tableLayoutPanel1.SuspendLayout();
+            panel1.SuspendLayout();
+            SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(156)))), ((int)(((byte)(136)))), ((int)(((byte)(255)))));
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 1.39417F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 98.60583F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85.15625F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.84375F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 173F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
-            this.tableLayoutPanel1.TabIndex = 6;
+            tableLayoutPanel1.BackColor = Color.FromArgb(156, 136, 255);
+            tableLayoutPanel1.ColumnCount = 3;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1.39417F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 98.60583F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 10F));
+            tableLayoutPanel1.Controls.Add(panel1, 1, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 85.15625F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 14.84375F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 23F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 173F));
+            tableLayoutPanel1.Size = new Size(800, 450);
+            tableLayoutPanel1.TabIndex = 6;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.emailTextBox);
-            this.panel1.Controls.Add(this.errorLabel);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.loginButton);
-            this.panel1.Controls.Add(this.passwordTextBox);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(14, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(772, 444);
-            this.panel1.TabIndex = 0;
+            panel1.Controls.Add(emailTextBox);
+            panel1.Controls.Add(errorLabel);
+            panel1.Controls.Add(label2);
+            panel1.Controls.Add(loginButton);
+            panel1.Controls.Add(passwordTextBox);
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(label1);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(14, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(772, 444);
+            panel1.TabIndex = 0;
             // 
             // emailTextBox
             // 
-            this.emailTextBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.emailTextBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.emailTextBox.Location = new System.Drawing.Point(264, 202);
-            this.emailTextBox.Name = "emailTextBox";
-            this.emailTextBox.Size = new System.Drawing.Size(234, 27);
-            this.emailTextBox.TabIndex = 6;
-            this.emailTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            emailTextBox.Anchor = AnchorStyles.None;
+            emailTextBox.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            emailTextBox.Location = new Point(264, 202);
+            emailTextBox.Name = "emailTextBox";
+            emailTextBox.Size = new Size(234, 27);
+            emailTextBox.TabIndex = 6;
+            emailTextBox.TextAlign = HorizontalAlignment.Center;
             // 
             // errorLabel
             // 
-            this.errorLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.errorLabel.AutoSize = true;
-            this.errorLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.errorLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.errorLabel.Location = new System.Drawing.Point(279, 144);
-            this.errorLabel.Name = "errorLabel";
-            this.errorLabel.Size = new System.Drawing.Size(199, 21);
-            this.errorLabel.TabIndex = 12;
-            this.errorLabel.Text = "Грешен имейл или парола";
-            this.errorLabel.Visible = false;
+            errorLabel.Anchor = AnchorStyles.None;
+            errorLabel.AutoSize = true;
+            errorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            errorLabel.ForeColor = Color.DarkRed;
+            errorLabel.Location = new Point(279, 144);
+            errorLabel.Name = "errorLabel";
+            errorLabel.Size = new Size(199, 21);
+            errorLabel.TabIndex = 12;
+            errorLabel.Text = "Грешен имейл или парола";
+            errorLabel.Visible = false;
             // 
             // label2
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
-            this.label2.Location = new System.Drawing.Point(264, 230);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 25);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "Парола";
+            label2.Anchor = AnchorStyles.None;
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.ForeColor = Color.FromArgb(245, 246, 250);
+            label2.Location = new Point(264, 230);
+            label2.Name = "label2";
+            label2.Size = new Size(78, 25);
+            label2.TabIndex = 10;
+            label2.Text = "Парола";
             // 
             // loginButton
             // 
-            this.loginButton.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.loginButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(42)))), ((int)(((byte)(86)))));
-            this.loginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.loginButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
-            this.loginButton.Location = new System.Drawing.Point(326, 309);
-            this.loginButton.Name = "loginButton";
-            this.loginButton.Size = new System.Drawing.Size(103, 30);
-            this.loginButton.TabIndex = 11;
-            this.loginButton.Text = "Вход";
-            this.loginButton.UseVisualStyleBackColor = false;
-            this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
+            loginButton.Anchor = AnchorStyles.None;
+            loginButton.BackColor = Color.FromArgb(25, 42, 86);
+            loginButton.FlatStyle = FlatStyle.Flat;
+            loginButton.ForeColor = Color.FromArgb(245, 246, 250);
+            loginButton.Location = new Point(326, 309);
+            loginButton.Name = "loginButton";
+            loginButton.Size = new Size(103, 30);
+            loginButton.TabIndex = 11;
+            loginButton.Text = "Вход";
+            loginButton.UseVisualStyleBackColor = false;
+            loginButton.Click += loginButton_Click;
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.passwordTextBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.passwordTextBox.Location = new System.Drawing.Point(264, 258);
-            this.passwordTextBox.Name = "passwordTextBox";
-            this.passwordTextBox.Size = new System.Drawing.Size(234, 27);
-            this.passwordTextBox.TabIndex = 8;
-            this.passwordTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            passwordTextBox.Anchor = AnchorStyles.None;
+            passwordTextBox.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            passwordTextBox.Location = new Point(264, 258);
+            passwordTextBox.Name = "passwordTextBox";
+            passwordTextBox.PasswordChar = '*';
+            passwordTextBox.Size = new Size(234, 27);
+            passwordTextBox.TabIndex = 8;
+            passwordTextBox.TextAlign = HorizontalAlignment.Center;
             // 
             // label3
             // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
-            this.label3.Location = new System.Drawing.Point(333, 74);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 47);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "Вход";
+            label3.Anchor = AnchorStyles.None;
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 26.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.ForeColor = Color.FromArgb(245, 246, 250);
+            label3.Location = new Point(333, 74);
+            label3.Name = "label3";
+            label3.Size = new Size(96, 47);
+            label3.TabIndex = 9;
+            label3.Text = "Вход";
             // 
             // label1
             // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
-            this.label1.Location = new System.Drawing.Point(264, 174);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 25);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Имейл";
+            label1.Anchor = AnchorStyles.None;
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.ForeColor = Color.FromArgb(245, 246, 250);
+            label1.Location = new Point(264, 174);
+            label1.Name = "label1";
+            label1.Size = new Size(70, 25);
+            label1.TabIndex = 7;
+            label1.Text = "Имейл";
             // 
             // LoginForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "LoginForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Вход";
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(tableLayoutPanel1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "LoginForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Вход";
+            tableLayoutPanel1.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion

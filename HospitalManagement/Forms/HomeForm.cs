@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace HospitalManagement.Forms
 {
-    public partial class HomeForm : Form
+    public partial class HomeForm : Form    
     {
         public HomeForm()
         {
